@@ -23,6 +23,7 @@ export abstract class FileTransfer<T = any> {
   getHttpMethod() {
     return this.request.method;
   }
+
   isPending() {
     return this.state === TRANSFER_STATE.Pending;
   }
@@ -70,11 +71,11 @@ export class UploadTransfer<T = any> extends FileTransfer<T> {
    * The name of the file to upload.
    * @private
    */
-  private readonly _filename: string;
+  private readonly _filename?: string;
 
   constructor(request: HttpRequest<T>, filename?: string) {
     super(request);
-    this._filename = filename;
+    this._filename = filename ?? undefined;
     this._response = new HttpUploadTransfer(filename);
   }
 

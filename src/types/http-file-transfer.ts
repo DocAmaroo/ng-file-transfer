@@ -7,6 +7,7 @@ export abstract class HttpFileTransfer<T = any> {
     this._state = TRANSFER_STATE.Pending;
     this._bytesLoaded = 0;
     this._bytesToTransfer = bytesToTransfer;
+    this._response = new HttpResponse<T>();
   }
 
   /**
@@ -45,7 +46,7 @@ export abstract class HttpFileTransfer<T = any> {
    * Can be null until the transfer complete.
    * @private
    */
-  protected _response?: HttpResponse<T>;
+  protected _response: HttpResponse<T>;
 
   get response() {
     return this._response;
@@ -56,15 +57,15 @@ export abstract class HttpFileTransfer<T = any> {
   }
 
   getProgression() {
-    if (!this._bytesToTransfer) return null;
+    if (!this._bytesLoaded || !this._bytesToTransfer) return null;
     return (100 * this._bytesLoaded) / this._bytesToTransfer;
   }
 
   handleHttpEvent(event: HttpEvent<T>) {
     if (isHttpProgressEvent(event)) {
       this.state = TRANSFER_STATE.InProgress;
-      this.bytesLoaded = event.loaded;
-      this.bytesToTransfer = event.total;
+      if (event.loaded) this.bytesLoaded = event.loaded;
+      if (event.total) this.bytesToTransfer = event.total;
     }
 
     if (isHttpHeaderResponse(event)) {
@@ -102,7 +103,7 @@ export class HttpDownloadTransfer extends HttpFileTransfer<Blob> {
     if (!disposition) return;
 
     const match = disposition.match(/filename="(.*)"/);
-    return match[1];
+    return match ? match[1] : undefined;
   }
 }
 
@@ -124,6 +125,6 @@ export class HttpUploadTransfer<T = any> extends HttpFileTransfer<T> {
    * Can be null until the transfer complete or nothing has been returned.
    */
   getBody(): T | null {
-    return this._response.body || null;
+    return this._response?.body || null;
   }
 }

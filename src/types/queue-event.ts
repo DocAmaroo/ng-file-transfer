@@ -1,6 +1,7 @@
 import { Item } from './file-transfer-queue';
 
 export const QUEUE_EVENT_TYPE = {
+  Initialize: 'init-event',
   New: 'new-transfer',
   Next: 'transfer-to-proceed',
 } as const;
@@ -16,6 +17,10 @@ export class QueueEvent {
     this.type = type;
     this.item = item;
     this.timestamp = new Date().getTime();
+  }
+
+  static Initialize() {
+    return new QueueEvent(QUEUE_EVENT_TYPE.Initialize);
   }
 
   static New(item?: Item<any>) {

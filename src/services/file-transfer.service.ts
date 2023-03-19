@@ -1,15 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, finalize, Observer, takeWhile } from 'rxjs';
-import {
-  DownloadTransfer,
-  HttpDownloadTransfer,
-  HttpFileTransfer,
-  HttpUploadTransfer,
-  Item,
-  MultiQueue,
-  UploadTransfer,
-} from '../types';
+import { DownloadTransfer, HttpDownloadTransfer, HttpUploadTransfer, Item, MultiQueue, UploadTransfer } from '../types';
 import { HttpService } from './http.service';
 import { FileTransferFailedError } from '../errors';
 import { TRANSFER_STATE } from '../enums';
@@ -46,11 +38,11 @@ export class FileTransferService {
     item.cancel();
   }
 
-  refreshSize(): void {
+  private _refreshSize(): void {
     this.size$.next(this.downloadQueue.size$.getValue() + this.uploadQueue.size$.getValue());
   }
 
-  get(item: Item<DownloadTransfer>): void {
+  private _get(item: Item<DownloadTransfer>): void {
     this._httpService
       .get(item.value.request)
       .pipe(
@@ -60,7 +52,7 @@ export class FileTransferService {
       .subscribe(this._handleResponse(item));
   }
 
-  post<T = any>(item: Item<UploadTransfer>) {
+  private _post<T = any>(item: Item<UploadTransfer>) {
     return this._httpService
       .post<T>(item.value.request)
       .pipe(
@@ -70,7 +62,7 @@ export class FileTransferService {
       .subscribe(this._handleResponse(item));
   }
 
-  put<T = any>(item: Item<UploadTransfer>) {
+  private _put<T = any>(item: Item<UploadTransfer>) {
     return this._httpService
       .put<T>(item.value.request)
       .pipe(
@@ -82,25 +74,25 @@ export class FileTransferService {
 
   private _listenQueues() {
     this.downloadQueue.events$.subscribe((event) => {
-      if (event.type === 'transfer-to-proceed') this._executeDownload(event.item);
+      if (event.type === 'transfer-to-proceed' && event.item) this._executeDownload(event.item);
     });
 
     this.uploadQueue.events$.subscribe((event) => {
-      if (event.type === 'transfer-to-proceed') this._executeUpload(event.item);
+      if (event.type === 'transfer-to-proceed' && event.item) this._executeUpload(event.item);
     });
 
-    this.downloadQueue.size$.subscribe(() => this.refreshSize());
-    this.uploadQueue.size$.subscribe(() => this.refreshSize());
+    this.downloadQueue.size$.subscribe(() => this._refreshSize());
+    this.uploadQueue.size$.subscribe(() => this._refreshSize());
   }
 
   private _executeDownload(item: Item<DownloadTransfer>) {
-    return this.get(item);
+    return this._get(item);
   }
 
   private _executeUpload(item: Item<UploadTransfer>) {
     const httpMethod = item.value.getHttpMethod().toUpperCase();
-    if (httpMethod === 'POST') return this.post(item);
-    if (httpMethod === 'PUT') return this.put(item);
+    if (httpMethod === 'POST') return this._post(item);
+    if (httpMethod === 'PUT') return this._put(item);
     throw new Error(`The http method ${httpMethod} is unknown are not handled.`);
   }
 
@@ -111,7 +103,7 @@ export class FileTransferService {
    */
   private _handleResponse<T extends DownloadTransfer | UploadTransfer>(
     item: Item<T>,
-  ): Partial<Observer<HttpFileTransfer>> {
+  ): Partial<Observer<HttpDownloadTransfer | HttpUploadTransfer>> {
     return {
       next: (response: HttpDownloadTransfer | HttpUploadTransfer) => {
         item.value.response = response;

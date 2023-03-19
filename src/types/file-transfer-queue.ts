@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { TRANSFER_STATE, TransferState } from '../enums';
 import { FileTransfer } from './file-transfer';
 import { QueueEvent } from './queue-event';
@@ -26,7 +26,6 @@ export class Queue<T extends FileTransfer> {
    * The queue size as observable
    */
   readonly size$: BehaviorSubject<number>;
-  readonly events$: Observable<QueueEvent>;
   /**
    * The queue items
    * @private
@@ -38,7 +37,6 @@ export class Queue<T extends FileTransfer> {
     this._items = [];
     this.items$ = new BehaviorSubject(this._items);
     this.size$ = new BehaviorSubject(0);
-    this.events$ = new Observable<QueueEvent>();
   }
 
   /**
@@ -141,6 +139,7 @@ export class MultiQueue<T extends FileTransfer> {
     this.progressQueue = new Queue<T>();
     this.waitingQueue = new Queue<T>();
     this.size$ = new BehaviorSubject<number>(0);
+    this.events$ = new BehaviorSubject(QueueEvent.Initialize());
   }
 
   /**
