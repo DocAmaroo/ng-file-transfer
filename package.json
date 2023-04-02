@@ -2,24 +2,17 @@
   "name": "ng-file-transfer",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "prepare": "husky install",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "lint:check": "eslint \"{src,apps,libs,test}/**/*.ts\" --max-warnings 0",
-    "prettier": "prettier --write \"{src,test}/**/*.ts\""
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DocAmaroo/ng-file-transfer.git"
   },
   "keywords": [
     "Angular",
-    "service",
     "file",
     "upload",
-    "download"
+    "download",
+    "service",
+    "concurrency"
   ],
   "author": "DocAmaroo",
   "license": "MIT",
@@ -27,13 +20,22 @@
     "url": "https://github.com/DocAmaroo/ng-file-transfer/issues"
   },
   "homepage": "https://github.com/DocAmaroo/ng-file-transfer#readme",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "husky install",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint:check": "eslint \"{src,apps,libs,test}/**/*.ts\" --max-warnings 0",
+    "prettier": "prettier --write \"{src,test}/**/*.ts\""
+  },
   "dependencies": {
-    "@angular/common": "15.2.2"
+    "@angular/common": "15.2.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
     "@types/jest": "^29.5.0",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "commitizen": "^4.3.0",

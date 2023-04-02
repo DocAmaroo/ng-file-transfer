@@ -13,5 +13,5 @@
     "incremental": true,
     "noEmit": false
   },
-  "include": ["src/**/*.ts", "examples/**/*.ts"]
+  "include": ["src/**/*.ts"]
 }
