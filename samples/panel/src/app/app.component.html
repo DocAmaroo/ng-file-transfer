@@ -1,0 +1,10 @@
+<button (click)='download()' type='button'>Download</button>
+<h1>Transfer in progress</h1>
+<ng-container *ngIf='transfer | async as t'>
+  <p>{{ t.state }}</p>
+  <p>{{ t.getProgression() }}</p>
+  <p>{{ t.hasBeenInterrupted() }}</p>
+  <p>{{ t.isBusy() }}</p>
+  <p>{{ t.isFulfilled() }}</p>
+</ng-container>
+<router-outlet></router-outlet>

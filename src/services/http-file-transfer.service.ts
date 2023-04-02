@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { HttpOptions, HttpUploadTransfer } from '../types';
-import { download, upload } from '../pipes';
+import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
+import { HttpDownloadTransferError } from '../errors';
 import { isHttpErrorBlobResponse } from '../guards/http-response.guard';
-import { HttpDownloadTransferError } from '../errors/http-download-transfer.error';
+import { upload } from '../pipes';
+import { HttpOptions, HttpTransfer } from '../types';
 
 @Injectable()
-export class HttpService {
-  constructor(private readonly _http: HttpClient) {}
+export class HttpFileTransferService {
+  constructor(private readonly http: HttpClient) {}
 
   get<T = any>(req: HttpRequest<T>) {
-    return this._http
+    return this.http
       .get(req.url, {
         ...HttpOptions.fromRequest(req),
         observe: 'events',
@@ -19,31 +19,33 @@ export class HttpService {
         responseType: 'blob',
       })
       .pipe(
-        download(),
         catchError((err) => {
-          if (isHttpErrorBlobResponse(err)) throw new HttpDownloadTransferError(err);
+          if (isHttpErrorBlobResponse(err)) {
+            throw new HttpDownloadTransferError(err);
+          }
+
           throw err;
         }),
       );
   }
 
-  post<T = any>(req: HttpRequest<any>): Observable<HttpUploadTransfer<T>> {
-    return this._http
+  post<T = any>(req: HttpRequest<any>): Observable<HttpTransfer<T>> {
+    return this.http
       .post<T>(req.url, req.body, {
         ...HttpOptions.fromRequest(req),
         observe: 'events',
         reportProgress: true,
       })
-      .pipe(upload(req.body.get('file')));
+      .pipe(upload());
   }
 
-  put<T = any>(req: HttpRequest<any>): Observable<HttpUploadTransfer<T>> {
-    return this._http
+  put<T = any>(req: HttpRequest<any>): Observable<HttpTransfer<T>> {
+    return this.http
       .put<T>(req.url, req.body, {
         ...HttpOptions.fromRequest(req),
         observe: 'events',
         reportProgress: true,
       })
-      .pipe(upload(req.body.get('file')));
+      .pipe(upload());
   }
 }
