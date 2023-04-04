@@ -1,9 +1,9 @@
 import { HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { finalize, Observer } from 'rxjs';
+import { QueueEventType } from '../enums';
 import { FileTransferFailedError } from '../errors';
 import { HttpTransfer, Queue, Transfer } from '../types';
-import { QueueEventType } from '../types/queue-event';
 import { HttpFileTransferService } from './http-file-transfer.service';
 
 @Injectable()
