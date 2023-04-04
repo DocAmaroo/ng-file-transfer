@@ -20,6 +20,8 @@
     "url": "https://github.com/DocAmaroo/ng-file-transfer/issues"
   },
   "homepage": "https://github.com/DocAmaroo/ng-file-transfer#readme",
+  "files": ["lib"],
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "prepare": "husky install",
