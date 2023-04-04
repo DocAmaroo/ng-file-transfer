@@ -13,5 +13,6 @@
     "incremental": true,
     "noEmit": false
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "lib"]
 }
