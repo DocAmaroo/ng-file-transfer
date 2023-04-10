@@ -1,16 +1,25 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatButtonModule } from '@angular/material/button';
 import { BrowserModule } from '@angular/platform-browser';
-import {
-  FileTransferService,
-  HttpFileTransferService,
-} from '../../projects/transfer/src/lib/services';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FileTransferService, HttpFileTransferService } from '../../projects/transfer/src/lib';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { TransferPanelModule } from './transfer-panel/transfer-panel.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    HttpClientModule,
+    TransferPanelModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+  ],
   providers: [FileTransferService, HttpFileTransferService],
   bootstrap: [AppComponent],
 })

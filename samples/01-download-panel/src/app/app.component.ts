@@ -1,8 +1,8 @@
 import { HttpRequest } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { takeWhile } from 'rxjs';
-import { FileTransferService } from '../../projects/transfer/src/lib/services';
-import { Transfer } from '../../projects/transfer/src/lib/types';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { FileTransferService, Transfer } from '../../projects/transfer/src/lib';
+import { TransferPanelComponent } from './transfer-panel/transfer-panel.component';
 
 @Component({
   selector: 'app-root',
@@ -10,17 +10,19 @@ import { Transfer } from '../../projects/transfer/src/lib/types';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'panel';
-  transfer?: Transfer<Blob>;
+  transfer$?: Transfer<Blob>;
 
-  constructor(private readonly fileService: FileTransferService) {}
+  constructor(
+    private readonly fileService: FileTransferService,
+    private readonly matBottomSheet: MatBottomSheet,
+  ) {}
 
   download() {
     const request = new HttpRequest<string>('GET', 'http://localhost:8000');
-    this.transfer = this.fileService.newTransfer<Blob>(request);
-    this.transfer.pipe(takeWhile((dl) => dl.isLazy())).subscribe({
-      next: (value) => console.log('download in progress', value),
-      complete: () => console.log('download complete'),
-    });
+    this.transfer$ = this.fileService.newTransfer<Blob>(request);
+  }
+
+  openPanel() {
+    this.matBottomSheet.open(TransferPanelComponent);
   }
 }

@@ -1,7 +1,6 @@
 import { HttpEvent, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { TransferState } from '../enums';
-import { isHttpHeaderResponse, isHttpProgressEvent, isHttpResponse } from '../guards';
 import { HttpTransfer } from './http-transfer';
 import { TransferId } from './transfer-id';
 
@@ -16,21 +15,7 @@ export class Transfer<Res = any, Req = any> extends BehaviorSubject<HttpTransfer
   }
 
   handleHttpEvent(event: HttpEvent<any>) {
-    if (isHttpHeaderResponse(event)) {
-      this.value.state = TransferState.Pending;
-    }
-
-    if (isHttpProgressEvent(event)) {
-      this.value.state = TransferState.InProgress;
-      if (event.loaded) this.value.loaded = event.loaded;
-      if (event.total) this.value.total = event.total;
-    }
-
-    if (isHttpResponse(event)) {
-      this.value.state = TransferState.Complete;
-      this.value.response = event;
-    }
-
+    this.value.handleHttpEvent(event);
     this.emitChanges();
   }
 

@@ -29,7 +29,7 @@ export class FileTransferService {
     this.queue.cancel(transfer);
   }
 
-  next() {
+  private next() {
     if (this.ongoing.getSize() >= this.MAX_CONCURRENCY) return;
 
     const next = this.queue.next();
@@ -52,8 +52,8 @@ export class FileTransferService {
   private get(transfer: Transfer<HttpTransfer>): void {
     this.httpService
       .get(transfer.request)
-      .pipe(finalize(() => this.next()))
-      .subscribe(this._handleResponse<Blob>(transfer));
+      .pipe(finalize(() => this.finalizeTransfer(transfer)))
+      .subscribe(this.handleResponse<Blob>(transfer));
   }
 
   /**
@@ -61,9 +61,7 @@ export class FileTransferService {
    * @private
    * @param transfer
    */
-  private _handleResponse<Res>(
-    transfer: Transfer<HttpTransfer>,
-  ): Partial<Observer<HttpEvent<Res>>> {
+  private handleResponse<Res>(transfer: Transfer<HttpTransfer>): Partial<Observer<HttpEvent<Res>>> {
     return {
       next: (event: HttpEvent<Res>) => {
         transfer.handleHttpEvent(event);
@@ -78,5 +76,10 @@ export class FileTransferService {
         }
       },
     };
+  }
+
+  private finalizeTransfer(transfer: Transfer) {
+    this.ongoing.remove(transfer);
+    this.next();
   }
 }

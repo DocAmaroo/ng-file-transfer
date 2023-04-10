@@ -1,0 +1,17 @@
+<div class='file-progress-bar'>
+  <ng-container *ngIf='transfer | async as httpTransfer'>
+<!--    <span *ngIf='httpTransfer.response.filename as any' class='progress-bar-title'>-->
+<!--      {{ httpTransfer.response.filename }}-->
+<!--    </span>-->
+    <mat-progress-bar
+      [mode]='state'
+      [value]='httpTransfer.value'
+    ></mat-progress-bar>
+    <span
+      *ngIf='httpTransfer.loaded && httpTransfer.total'
+      class='file-progress-bar-legend'
+    >
+      {{ httpTransfer.loaded }}/{{ httpTransfer.total }}
+    </span>
+  </ng-container>
+</div>

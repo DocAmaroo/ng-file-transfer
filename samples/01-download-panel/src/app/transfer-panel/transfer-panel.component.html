@@ -1,0 +1,54 @@
+<div class='bottom-sheet-header'>
+  <span class='title-2'>Transfer panel</span>
+</div>
+<mat-tab-group
+  class='bottom-sheet-content'
+  dynamicHeight
+  mat-align-tabs='center'
+>
+  <mat-tab>
+    <!-- DOWNLOAD TAB HEADER -->
+    <ng-template mat-tab-label>
+      <span
+        [matBadgeHidden]='(this.queue.size$ | async) === 0'
+        [matBadge]='this.queue.size$ | async'
+        class='inline-text-icon'
+      >
+        <mat-icon class='example-tab-icon'>file_download</mat-icon>
+        Downloads
+      </span>
+    </ng-template>
+    <!-- DOWNLOAD TAB CONTENT -->
+    <ng-template matTabContent>
+      <mat-list class='current-download'>
+        <ng-container *ngIf='this.ongoing.size$ | async; else emptyQueue'>
+          <mat-list-item *ngFor='let transfer of this.ongoing.transfers$ | async'>
+            <div class='list-item inline-text-icon'>
+              <mat-icon matListIcon>file_download</mat-icon>
+              <app-file-progress-bar [transfer]='transfer'></app-file-progress-bar>
+              <button (click)='cancel(transfer)' class='btn-error' mat-icon-button>
+                <mat-icon class='material-icons-outlined'>cancel</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+        </ng-container>
+
+        <!-- WAITING TRANSFER -->
+        <ng-container>
+          <mat-list-item *ngIf='this.queue.size$ | async'>
+            <span class='small-text'> {{ this.queue.size$ | async }} pending...</span>
+          </mat-list-item>
+        </ng-container>
+      </mat-list>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+<ng-template #emptyQueue>
+  <span class='subtitle'>
+    <mat-icon class='material-icons-outlined done-icon' inline
+    >download_done
+    </mat-icon>
+    All transfer completed
+  </span>
+</ng-template>

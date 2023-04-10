@@ -1,10 +1,21 @@
-<button (click)='download()' type='button'>Download</button>
-<h1>Transfer in progress</h1>
-<ng-container *ngIf='transfer | async as t'>
-  <p>{{ t.state }}</p>
-  <p>{{ t.getProgression() }}</p>
-  <p>{{ t.hasBeenInterrupted() }}</p>
-  <p>{{ t.isBusy() }}</p>
-  <p>{{ t.isFulfilled() }}</p>
-</ng-container>
+<section class='transfer'>
+  <div class='actions'>
+    <button (click)='download()' color='primary' mat-raised-button>Download</button>
+    <button (click)='openPanel()' color='primary' mat-raised-button>Open panel</button>
+  </div>
+
+  <div class='content'>
+    <h1>Transfer information</h1>
+
+    <ul *ngIf='transfer$ | async as transfer'>
+      <li>{{ transfer.state }}</li>
+      <li>{{ transfer.computeValue() }}</li>
+      <li>hasBeenInterrupted: {{ transfer.hasBeenInterrupted() }}</li>
+      <li>isBusy: {{ transfer.isBusy() }}</li>
+      <li>isFulfilled: {{ transfer.isFulfilled() }}</li>
+    </ul>
+  </div>
+</section>
+
+
 <router-outlet></router-outlet>

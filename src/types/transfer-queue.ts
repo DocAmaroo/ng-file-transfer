@@ -47,7 +47,7 @@ export class Queue {
 
   remove(transfer: Transfer): Transfer | undefined {
     const index = this.transfers.findIndex((t) => t.id === transfer.id);
-    if (!index) return;
+    if (index === -1) return;
 
     const splice = this.transfers.splice(index, 1);
     if (!splice.length) return;

@@ -1,0 +1,33 @@
+:host {
+  .bottom-sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .title-2 {
+    margin-top: 16px;
+  }
+
+  .bottom-sheet-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+
+  .mat-icon.in-progress-icon {
+    color: rgb(235, 181, 40);
+  }
+
+  .mat-icon.done-icon {
+    color: rgb(38, 166, 91);
+  }
+
+  .list-item {
+    width: 100%;
+    gap: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+}

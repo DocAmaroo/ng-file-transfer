@@ -1,0 +1,11 @@
+:host {
+  .transfer {
+    padding: 32px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 16px;
+  }
+}
