@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
-import { Subscription } from 'rxjs';
-import { Transfer, TransferState } from '../../../projects/transfer/src/lib';
+import { Subscription, takeWhile } from 'rxjs';
+import { Transfer, TransferState } from '../../../../../projects/transfer/src/lib';
 
 @Component({
   selector: 'app-file-progress-bar',
@@ -17,9 +17,11 @@ export class FileProgressBarComponent implements OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['transfer']) {
       this.transfer = changes['transfer'].currentValue;
-      this.subscription = this.transfer.subscribe((value) => {
-        this.state = this.asProgressBarMode(value.state);
-      });
+      this.subscription = this.transfer
+        .pipe(takeWhile((value) => value.isLazy()))
+        .subscribe((value) => {
+          this.state = this.asProgressBarMode(value.state);
+        });
     }
   }
 

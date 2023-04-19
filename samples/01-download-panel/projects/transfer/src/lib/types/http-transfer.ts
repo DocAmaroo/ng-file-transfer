@@ -6,14 +6,14 @@ export class HttpTransfer<Res = any> {
   state: TransferState;
   loaded: number;
   total: number;
-  value: number;
+  percent: number;
   response?: HttpResponse<Res>;
 
   constructor() {
     this.state = TransferState.Created;
     this.loaded = 0;
     this.total = 0;
-    this.value = 0;
+    this.percent = 0;
   }
 
   handleHttpEvent(event: HttpEvent<Res>) {
@@ -25,18 +25,13 @@ export class HttpTransfer<Res = any> {
       this.state = TransferState.InProgress;
       this.loaded = event.loaded || 0;
       this.total = event.total || 0;
-      this.value = this.computeValue();
+      this.percent = this.computePercent();
     }
 
     if (isHttpResponse(event)) {
       this.state = TransferState.Complete;
       this.response = event;
     }
-  }
-
-  computeValue(): number {
-    if (!this.loaded || !this.total) return 0;
-    return (100 * this.loaded) / this.total;
   }
 
   isLazy() {
@@ -61,5 +56,10 @@ export class HttpTransfer<Res = any> {
    */
   hasBeenInterrupted() {
     return this.state === TransferState.Failed || this.state === TransferState.Canceled;
+  }
+
+  private computePercent(): number {
+    if (!this.loaded || !this.total) return 0;
+    return (100 * this.loaded) / this.total;
   }
 }

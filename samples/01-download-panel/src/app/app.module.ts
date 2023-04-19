@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FileTransferService, HttpFileTransferService } from '../../projects/transfer/src/lib';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TransferPanelModule } from './transfer-panel/transfer-panel.module';
+import { TransferPanelModule } from './shared/components/transfer-panel/transfer-panel.module';
 
 @NgModule({
   declarations: [AppComponent],

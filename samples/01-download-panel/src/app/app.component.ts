@@ -2,7 +2,7 @@ import { HttpRequest } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileTransferService, Transfer } from '../../projects/transfer/src/lib';
-import { TransferPanelComponent } from './transfer-panel/transfer-panel.component';
+import { TransferPanelComponent } from './shared/components/transfer-panel/transfer-panel.component';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +19,7 @@ export class AppComponent {
 
   download() {
     const request = new HttpRequest<string>('GET', 'http://localhost:8000');
-    this.transfer$ = this.fileService.newTransfer<Blob>(request);
+    this.transfer$ = this.fileService.request(request);
   }
 
   openPanel() {

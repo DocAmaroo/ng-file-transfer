@@ -5,7 +5,7 @@
 <!--    </span>-->
     <mat-progress-bar
       [mode]='state'
-      [value]='httpTransfer.value'
+      [value]='httpTransfer.percent'
     ></mat-progress-bar>
     <span
       *ngIf='httpTransfer.loaded && httpTransfer.total'

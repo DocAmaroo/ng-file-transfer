@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FileTransferService, Queue, Transfer } from '../../../projects/transfer/src/lib';
+import { FileTransferService, Queue, Transfer } from '../../../../../projects/transfer/src/lib';
 
 @Component({
   selector: 'app-transfer-panel',

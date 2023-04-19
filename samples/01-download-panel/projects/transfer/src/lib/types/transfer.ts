@@ -7,7 +7,6 @@ import { TransferId } from './transfer-id';
 export class Transfer<Res = any, Req = any> extends BehaviorSubject<HttpTransfer<Res>> {
   id: TransferId;
   readonly request: HttpRequest<Req>;
-
   constructor(request: HttpRequest<Req>) {
     super(new HttpTransfer<Res>());
     this.request = request;
@@ -17,14 +16,6 @@ export class Transfer<Res = any, Req = any> extends BehaviorSubject<HttpTransfer
   handleHttpEvent(event: HttpEvent<any>) {
     this.value.handleHttpEvent(event);
     this.emitChanges();
-  }
-
-  getProgression() {
-    return this.value.value;
-  }
-
-  getState() {
-    return this.value.state;
   }
 
   setState(state: TransferState) {

@@ -9,7 +9,7 @@
 
     <ul *ngIf='transfer$ | async as transfer'>
       <li>{{ transfer.state }}</li>
-      <li>{{ transfer.computeValue() }}</li>
+      <li>{{ transfer.percent }}</li>
       <li>hasBeenInterrupted: {{ transfer.hasBeenInterrupted() }}</li>
       <li>isBusy: {{ transfer.isBusy() }}</li>
       <li>isFulfilled: {{ transfer.isFulfilled() }}</li>
