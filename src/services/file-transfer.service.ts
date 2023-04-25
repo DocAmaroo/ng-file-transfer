@@ -1,9 +1,9 @@
 import { HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { finalize, Observer } from 'rxjs';
-import { QueueEventType } from '../enums';
+import { finalize, Observer, takeWhile } from 'rxjs';
 import { FileTransferFailedError } from '../errors';
 import { HttpTransfer, Queue, Transfer } from '../types';
+import { QueueEventType } from '../types/queue-event';
 import { HttpFileTransferService } from './http-file-transfer.service';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class FileTransferService {
     this.listenEvents();
   }
 
-  newTransfer<Res = any, Req = any>(request: HttpRequest<Req>) {
+  request<Res = any, Req = any>(request: HttpRequest<Req>) {
     const transfer = new Transfer<Res, Req>(request);
     this.queue.add(transfer);
     this.next();
@@ -52,7 +52,10 @@ export class FileTransferService {
   private get(transfer: Transfer<HttpTransfer>): void {
     this.httpService
       .get(transfer.request)
-      .pipe(finalize(() => this.finalizeTransfer(transfer)))
+      .pipe(
+        takeWhile(() => transfer.value.isLazy()),
+        finalize(() => this.finalizeTransfer(transfer)),
+      )
       .subscribe(this.handleResponse<Blob>(transfer));
   }
 

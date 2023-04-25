@@ -7,7 +7,6 @@ import { TransferId } from './transfer-id';
 export class Transfer<Res = any, Req = any> extends BehaviorSubject<HttpTransfer<Res>> {
   id: TransferId;
   readonly request: HttpRequest<Req>;
-
   constructor(request: HttpRequest<Req>) {
     super(new HttpTransfer<Res>());
     this.request = request;

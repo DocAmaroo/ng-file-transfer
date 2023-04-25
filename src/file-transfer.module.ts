@@ -1,9 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FileTransferService } from './services';
+import { HttpFileTransferService } from './services';
 
 @NgModule({
   imports: [HttpClientModule],
-  providers: [FileTransferService],
+  providers: [HttpFileTransferService],
 })
-export class FileTransferModule {}
+export class AppModule {}

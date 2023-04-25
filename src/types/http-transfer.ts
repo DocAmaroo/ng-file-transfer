@@ -4,14 +4,16 @@ import { isHttpHeaderResponse, isHttpProgressEvent, isHttpResponse } from '../gu
 
 export class HttpTransfer<Res = any> {
   state: TransferState;
-  total: number;
   loaded: number;
+  total: number;
+  percent: number;
   response?: HttpResponse<Res>;
 
   constructor() {
     this.state = TransferState.Created;
-    this.total = 0;
     this.loaded = 0;
+    this.total = 0;
+    this.percent = 0;
   }
 
   handleHttpEvent(event: HttpEvent<Res>) {
@@ -21,19 +23,15 @@ export class HttpTransfer<Res = any> {
 
     if (isHttpProgressEvent(event)) {
       this.state = TransferState.InProgress;
-      if (event.loaded) this.loaded = event.loaded;
-      if (event.total) this.total = event.total;
+      this.loaded = event.loaded || 0;
+      this.total = event.total || 0;
+      this.percent = this.computePercent();
     }
 
     if (isHttpResponse(event)) {
       this.state = TransferState.Complete;
       this.response = event;
     }
-  }
-
-  getProgression() {
-    if (!this.loaded || !this.total) return null;
-    return (100 * this.loaded) / this.total;
   }
 
   isLazy() {
@@ -58,5 +56,10 @@ export class HttpTransfer<Res = any> {
    */
   hasBeenInterrupted() {
     return this.state === TransferState.Failed || this.state === TransferState.Canceled;
+  }
+
+  private computePercent(): number {
+    if (!this.loaded || !this.total) return 0;
+    return (100 * this.loaded) / this.total;
   }
 }

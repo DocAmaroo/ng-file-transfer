@@ -20,7 +20,9 @@
     "url": "https://github.com/DocAmaroo/ng-file-transfer/issues"
   },
   "homepage": "https://github.com/DocAmaroo/ng-file-transfer#readme",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
@@ -55,5 +57,13 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "lint-staged": {
+    "**/*.{js,ts}": [
+      "prettier --write"
+    ],
+    "**/*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }

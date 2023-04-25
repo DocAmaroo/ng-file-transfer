@@ -18,7 +18,6 @@
         Downloads
       </span>
     </ng-template>
-    <!-- DOWNLOAD TAB CONTENT -->
     <ng-template matTabContent>
       <mat-list class='current-download'>
         <ng-container *ngIf='this.ongoing.size$ | async; else emptyQueue'>

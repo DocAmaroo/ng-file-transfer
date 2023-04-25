@@ -4,19 +4,16 @@ import { Transfer } from './transfer';
 import { TransferId } from './transfer-id';
 
 export class Queue {
-  readonly size$: BehaviorSubject<number>;
   readonly transfers$: BehaviorSubject<Transfer[]>;
+  readonly size$: BehaviorSubject<number>;
   readonly events$: Subject<QueueEvent>;
-  private transfers: Transfer[];
-  private size: number;
+
+  private transfers: Transfer[] = [];
+  private size = 0;
 
   constructor() {
-    this.size = 0;
     this.size$ = new BehaviorSubject(this.size);
-
-    this.transfers = [];
     this.transfers$ = new BehaviorSubject(this.transfers);
-
     this.events$ = new BehaviorSubject<QueueEvent>(QueueEvent.created());
   }
 
